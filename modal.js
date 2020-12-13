@@ -25,8 +25,11 @@ class Modal {
 		this.fg.appendChild(this.container)
 
 		this.content = elem // save the content element
+		console.log(elem)
 		this.content.remove() // remove it from DOM
 		this.content.style.display = display_style // set display style
+
+		this._escapePressed = this._escapePressed.bind(this)
 	}
 
 	_make_cover() {
@@ -46,6 +49,12 @@ class Modal {
 		return cover
 	}
 
+	_escapePressed(evt) {
+		console.log(evt)
+		if (evt.key === "Escape") { // escape key maps to keycode `27`
+			this.close()
+		}
+	}
 
 	open() {
 		let clone_elem = this.content.cloneNode(true) // clone content so that any input fields are reset
@@ -54,9 +63,12 @@ class Modal {
 
 		document.body.appendChild(this.bg)
 		document.body.appendChild(this.fg)
+
+		document.body.addEventListener('keyup', this._escapePressed)
 	}
 
 	close() {
+		document.body.removeEventListener('keyup', this._escapePressed)
 		this.bg.remove()
 		this.fg.remove()
 	}
