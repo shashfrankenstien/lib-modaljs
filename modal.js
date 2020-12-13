@@ -25,7 +25,6 @@ class Modal {
 		this.fg.appendChild(this.container)
 
 		this.content = elem // save the content element
-		console.log(elem)
 		this.content.remove() // remove it from DOM
 		this.content.style.display = display_style // set display style
 
@@ -50,7 +49,6 @@ class Modal {
 	}
 
 	_escapePressed(evt) {
-		console.log(evt)
 		if (evt.key === "Escape") { // escape key maps to keycode `27`
 			this.close()
 		}
