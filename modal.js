@@ -1,6 +1,8 @@
 class Modal {
-	constructor(elem, display_style, width, height, borderRadius) {
-		borderRadius = borderRadius || "5px"
+	constructor(elem, display_style, width, height, options) {
+		options = options || {}
+		let borderRadius = options.borderRadius || "5px"
+		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
 
 		this.bg = this._make_cover()
 		this.bg.style.backgroundColor = "black"
@@ -9,8 +11,10 @@ class Modal {
 		this.fg = this._make_cover()
 		this.fg.style.backgroundColor = "transparent"
 
-		this.fg.onmousedown = (evt)=>{
-			if (evt.target===this.fg) this.close()
+		if (this.autoClose) {
+			this.fg.onmousedown = (evt)=>{
+				if (evt.target===this.fg) this.close()
+			}
 		}
 
 		this.container = this._make_cover()
@@ -29,6 +33,32 @@ class Modal {
 		this.content.style.display = display_style // set display style
 
 		this._escapePressed = this._escapePressed.bind(this)
+	}
+
+	_make_close_btn() {
+		let btn = document.createElement("span")
+		btn.innerHTML = "&times;"
+		btn.id="close"
+		btn.onclick = ()=>{
+			this.close()
+		}
+		btn.style.position = "absolute"
+		btn.style.display = "flex"
+		btn.style.justifyContent = "center"
+		btn.style.alignItems = "center"
+		btn.style.top = "20px"
+		btn.style.right = "20px"
+		btn.style.width = "40px"
+		btn.style.height = "40px"
+		btn.style.borderRadius = "20px"
+		btn.style.cursor = "pointer"
+
+		btn.style.background = "#e3e3e3"
+		btn.style.opacity = "0.8"
+		btn.style.fontSize = "20px"
+		btn.style.fontWeight = "1000"
+		btn.style.zIndex = '110'
+		return btn
 	}
 
 	_make_cover() {
@@ -57,16 +87,21 @@ class Modal {
 	open() {
 		let clone_elem = this.content.cloneNode(true) // clone content so that any input fields are reset
 		this.container.innerHTML = "" // clear container
+		this.container.appendChild(this._make_close_btn())
 		this.container.appendChild(clone_elem) // append the new clone
 
 		document.body.appendChild(this.bg)
 		document.body.appendChild(this.fg)
 
-		document.body.addEventListener('keyup', this._escapePressed)
+		if (this.autoClose) {
+			document.body.addEventListener('keyup', this._escapePressed)
+		}
 	}
 
 	close() {
-		document.body.removeEventListener('keyup', this._escapePressed)
+		if (this.autoClose) {
+			document.body.removeEventListener('keyup', this._escapePressed)
+		}
 		this.bg.remove()
 		this.fg.remove()
 	}
