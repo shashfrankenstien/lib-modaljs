@@ -1,14 +1,14 @@
 class Modal {
-	constructor(elem, display_style, width, height, options) {
+	constructor(elem, displayStyle, width, height, options) {
 		options = options || {}
-		let borderRadius = options.borderRadius || "5px"
 		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
+		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
 
-		this.bg = this._make_cover()
+		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = "black"
 		this.bg.style.opacity = "0.5"
 
-		this.fg = this._make_cover()
+		this.fg = this._makeCover()
 		this.fg.style.backgroundColor = "transparent"
 
 		if (this.autoClose) {
@@ -17,25 +17,27 @@ class Modal {
 			}
 		}
 
-		this.container = this._make_cover()
+		this.container = this._makeCover()
 		this.container.style.height = height
 		this.container.style.width = width
 		this.container.style.position = "relative"
-		this.container.style.borderRadius = borderRadius
+		this.container.style.borderRadius = options.borderRadius || "5px"
 		this.container.style.backgroundColor = "white"
 		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
+		this.container.style.marginRight = "20px"
+		this.container.style.marginLeft = "20px"
 		// this.container.style.overflowY = "scroll"
 
 		this.fg.appendChild(this.container)
 
 		this.content = elem // save the content element
 		this.content.remove() // remove it from DOM
-		this.content.style.display = display_style // set display style
+		this.content.style.display = displayStyle // set display style of content
 
 		this._escapePressed = this._escapePressed.bind(this)
 	}
 
-	_make_close_btn() {
+	_makeCloseBtn() {
 		let btn = document.createElement("span")
 		btn.innerHTML = "&times;"
 		btn.id="close"
@@ -46,8 +48,8 @@ class Modal {
 		btn.style.display = "flex"
 		btn.style.justifyContent = "center"
 		btn.style.alignItems = "center"
-		btn.style.top = "20px"
-		btn.style.right = "20px"
+		btn.style.top = "15px"
+		btn.style.right = "25px"
 		btn.style.width = "40px"
 		btn.style.height = "40px"
 		btn.style.borderRadius = "20px"
@@ -61,7 +63,7 @@ class Modal {
 		return btn
 	}
 
-	_make_cover() {
+	_makeCover() {
 		let cover = document.createElement("div")
 		cover.style.position = 'fixed'
 		cover.style.height = '100%'
@@ -84,10 +86,16 @@ class Modal {
 		}
 	}
 
-	open() {
-		let clone_elem = this.content.cloneNode(true) // clone content so that any input fields are reset
+	cloneContent() {
+		return this.content.cloneNode(true)
+	}
+
+	open(mod_elem) {
+		let clone_elem = mod_elem || this.cloneContent() // clone content so that all input fields are reset
+		if (this.beforeOpen) this.beforeOpen(clone_elem) // usually used to attach required events
+
 		this.container.innerHTML = "" // clear container
-		this.container.appendChild(this._make_close_btn())
+		this.container.appendChild(this._makeCloseBtn())
 		this.container.appendChild(clone_elem) // append the new clone
 
 		document.body.appendChild(this.bg)
@@ -106,3 +114,57 @@ class Modal {
 		this.fg.remove()
 	}
 }
+
+
+
+class ModalConfirm extends Modal {
+	constructor() {
+		let elem = document.createElement("div")
+		elem.style.width = "90%"
+		elem.style.height = "50%"
+
+		let ok = document.createElement("button")
+		ok.id = "confirm-ok"
+		ok.classList.add("btn", 'btn-primary')
+		ok.style.position = "absolute"
+		ok.style.bottom = "10%"
+		ok.style.width = "30%"
+		ok.style.right = "26%"
+		ok.innerHTML = `Okay`
+
+		let cancel = document.createElement("button")
+		cancel.id = "confirm-cancel"
+		cancel.classList.add("btn", 'btn-secondary')
+		cancel.style.position = "absolute"
+		cancel.style.bottom = "10%"
+		cancel.style.width = "18%"
+		cancel.style.right = "5%"
+		cancel.innerHTML = `Cancel`
+
+		elem.innerHTML += `<h6 id="confirm-msg"></h6>`
+		elem.appendChild(ok)
+		elem.appendChild(cancel)
+
+		super(elem, "block", "550px", "180px", {autoClose: true})
+	}
+
+	open(msg, onokay, oncancel) {
+		this.beforeOpen = (form)=>{
+			form.querySelector("#confirm-msg").innerHTML = msg
+			let ok_btn = form.querySelector("#confirm-ok")
+			ok_btn.onclick = ()=>{
+				ok_btn.classList.add('btn-warning')
+				ok_btn.innerHTML = "Disabling ..."
+				if (onokay) onokay()
+			}
+			form.querySelector("#confirm-cancel").onclick = ()=>{
+				if (oncancel) oncancel()
+				this.close()
+			}
+		}
+		super.open()
+	}
+}
+
+
+const modal_confirm = new ModalConfirm()
