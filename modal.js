@@ -23,6 +23,7 @@ class Modal {
 		this.container.style.position = "relative"
 		this.container.style.borderRadius = options.borderRadius || "5px"
 		this.container.style.backgroundColor = "white"
+		this.container.style.color = "#0d0d0d"
 		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
 		this.container.style.marginRight = "20px"
 		this.container.style.marginLeft = "20px"
