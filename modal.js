@@ -117,49 +117,33 @@ class Modal {
 }
 
 
-
-class ModalConfirm extends Modal {
+class ModalAlert extends Modal {
 	constructor() {
 		let elem = document.createElement("div")
 		elem.style.width = "90%"
-		elem.style.height = "50%"
+		elem.style.height = "40%"
 
 		let ok = document.createElement("button")
-		ok.id = "confirm-ok"
+		ok.id = "modal-alert-ok"
 		ok.classList.add("btn", 'btn-primary')
 		ok.style.position = "absolute"
 		ok.style.bottom = "10%"
 		ok.style.width = "30%"
-		ok.style.right = "26%"
+		ok.style.right = "5%"
 		ok.innerHTML = `Okay`
 
-		let cancel = document.createElement("button")
-		cancel.id = "confirm-cancel"
-		cancel.classList.add("btn", 'btn-secondary')
-		cancel.style.position = "absolute"
-		cancel.style.bottom = "10%"
-		cancel.style.width = "18%"
-		cancel.style.right = "5%"
-		cancel.innerHTML = `Cancel`
-
-		elem.innerHTML += `<h6 id="confirm-msg"></h6>`
+		elem.innerHTML += `<snap id="modal-alert-msg"></snap>`
 		elem.appendChild(ok)
-		elem.appendChild(cancel)
 
-		super(elem, "block", "550px", "180px", {autoClose: true})
+		super(elem, "block", "600px", "180px", {autoClose: true})
 	}
 
-	open(msg, onokay, oncancel) {
+	open(msg, onokay) {
 		this.beforeOpen = (form)=>{
-			form.querySelector("#confirm-msg").innerHTML = msg
-			let ok_btn = form.querySelector("#confirm-ok")
+			form.querySelector("#modal-alert-msg").innerHTML = msg
+			let ok_btn = form.querySelector("#modal-alert-ok")
 			ok_btn.onclick = ()=>{
-				ok_btn.classList.add('btn-warning')
-				ok_btn.innerHTML = "Disabling ..."
-				if (onokay) onokay()
-			}
-			form.querySelector("#confirm-cancel").onclick = ()=>{
-				if (oncancel) oncancel()
+				if (onokay) onokay(form)
 				this.close()
 			}
 		}
@@ -168,4 +152,54 @@ class ModalConfirm extends Modal {
 }
 
 
+class ModalConfirm extends Modal {
+	constructor() {
+		let elem = document.createElement("div")
+		elem.style.width = "90%"
+		elem.style.height = "40%"
+
+		let ok = document.createElement("button")
+		ok.id = "modal-confirm-ok"
+		ok.classList.add("btn", 'btn-primary')
+		ok.style.position = "absolute"
+		ok.style.bottom = "10%"
+		ok.style.width = "30%"
+		ok.style.right = "26%"
+		ok.innerHTML = `Okay`
+
+		let cancel = document.createElement("button")
+		cancel.id = "modal-confirm-cancel"
+		cancel.classList.add("btn", 'btn-secondary')
+		cancel.style.position = "absolute"
+		cancel.style.bottom = "10%"
+		cancel.style.width = "18%"
+		cancel.style.right = "5%"
+		cancel.innerHTML = `Cancel`
+
+		elem.innerHTML += `<span id="modal-confirm-msg"></span>`
+		elem.appendChild(ok)
+		elem.appendChild(cancel)
+
+		super(elem, "block", "600px", "180px", {autoClose: true})
+	}
+
+	open(msg, onokay, oncancel) {
+		this.beforeOpen = (form)=>{
+			form.querySelector("#modal-confirm-msg").innerHTML = msg
+			let ok_btn = form.querySelector("#modal-confirm-ok")
+			ok_btn.onclick = ()=>{
+				if (onokay) onokay(form)
+				this.close()
+			}
+			form.querySelector("#modal-confirm-cancel").onclick = ()=>{
+				if (oncancel) oncancel(form)
+				this.close()
+			}
+		}
+		super.open()
+	}
+}
+
+
+const modal_alert = new ModalAlert()
 const modal_confirm = new ModalConfirm()
