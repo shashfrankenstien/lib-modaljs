@@ -141,8 +141,7 @@ class ModalAlert extends Modal {
 	open(msg, onokay) {
 		this.beforeOpen = (form)=>{
 			form.querySelector("#modal-alert-msg").innerHTML = msg
-			let ok_btn = form.querySelector("#modal-alert-ok")
-			ok_btn.onclick = ()=>{
+			form.querySelector("#modal-alert-ok").onclick = ()=>{
 				if (onokay) onokay(form)
 				this.close()
 			}
@@ -186,8 +185,7 @@ class ModalConfirm extends Modal {
 	open(msg, onokay, oncancel) {
 		this.beforeOpen = (form)=>{
 			form.querySelector("#modal-confirm-msg").innerHTML = msg
-			let ok_btn = form.querySelector("#modal-confirm-ok")
-			ok_btn.onclick = ()=>{
+			form.querySelector("#modal-confirm-ok").onclick = ()=>{
 				if (onokay) onokay(form)
 				this.close()
 			}
