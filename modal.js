@@ -2,6 +2,7 @@ class Modal {
 	constructor(elem, displayStyle, width, height, options) {
 		options = options || {}
 		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
+		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
 		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
 
 		this.bg = this._makeCover()
@@ -96,7 +97,7 @@ class Modal {
 		if (this.beforeOpen) this.beforeOpen(clone_elem) // usually used to attach required events
 
 		this.container.innerHTML = "" // clear container
-		this.container.appendChild(this._makeCloseBtn())
+		if (!this.noCloseBtn) this.container.appendChild(this._makeCloseBtn())
 		this.container.appendChild(clone_elem) // append the new clone
 
 		document.body.appendChild(this.bg)
