@@ -122,7 +122,7 @@ class Modal {
 class ModalAlert extends Modal {
 	constructor() {
 		let elem = document.createElement("div")
-		elem.style.width = "90%"
+		elem.style.width = "80%"
 		elem.style.height = "40%"
 
 		let ok = document.createElement("button")
@@ -137,7 +137,7 @@ class ModalAlert extends Modal {
 		elem.innerHTML += `<snap id="modal-alert-msg"></snap>`
 		elem.appendChild(ok)
 
-		super(elem, "block", "600px", "180px", {autoClose: true})
+		super(elem, "block", "600px", "180px", {autoClose: true, noCloseBtn:true})
 	}
 
 	open(msg, onokay) {
@@ -156,7 +156,7 @@ class ModalAlert extends Modal {
 class ModalConfirm extends Modal {
 	constructor() {
 		let elem = document.createElement("div")
-		elem.style.width = "90%"
+		elem.style.width = "80%"
 		elem.style.height = "40%"
 
 		let ok = document.createElement("button")
@@ -181,7 +181,7 @@ class ModalConfirm extends Modal {
 		elem.appendChild(ok)
 		elem.appendChild(cancel)
 
-		super(elem, "block", "600px", "180px", {autoClose: true})
+		super(elem, "block", "600px", "180px", {autoClose: true, noCloseBtn:true})
 	}
 
 	open(msg, onokay, oncancel) {
