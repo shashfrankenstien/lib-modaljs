@@ -22,7 +22,7 @@ class Modal {
 		this.container.style.height = height
 		this.container.style.width = width
 		this.container.style.position = "relative"
-		this.container.style.borderRadius = options.borderRadius || "5px"
+		this.container.style.borderRadius = options.borderRadius || "4px"
 		this.container.style.backgroundColor = "white"
 		this.container.style.color = "#0d0d0d"
 		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
@@ -91,8 +91,8 @@ class Modal {
 	cloneContent() {
 		return this.content.cloneNode(true)
 	}
-
-	open(mod_elem) {
+	
+	async open(mod_elem) {
 		let clone_elem = mod_elem || this.cloneContent() // clone content so that all input fields are reset
 		if (this.beforeOpen) this.beforeOpen(clone_elem) // usually used to attach required events
 
@@ -106,6 +106,7 @@ class Modal {
 		if (this.autoClose) {
 			document.body.addEventListener('keyup', this._escapePressed)
 		}
+		return clone_elem
 	}
 
 	close() {
