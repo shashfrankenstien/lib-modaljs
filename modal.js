@@ -7,10 +7,14 @@ class Modal {
 
 		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = "black"
-		this.bg.style.opacity = "0.5"
 
 		this.fg = this._makeCover()
 		this.fg.style.backgroundColor = "transparent"
+
+		// set up trnsition timing
+		this.bg.style.transition = "all 0.1s ease"
+		this.fg.style.transition = "all 0.2s ease"
+		this._resetTransition()
 
 		if (this.autoClose) {
 			this.fg.onmousedown = (evt)=>{
@@ -82,6 +86,20 @@ class Modal {
 		return cover
 	}
 
+	_resetTransition() {
+		// set values to closed state
+		this.bg.style.opacity = "0"
+		this.fg.style.opacity = "0"
+		this.fg.style.height = "120%"
+	}
+
+	_performTransition() {
+		// set values to open state
+		this.bg.style.opacity = "0.5"
+		this.fg.style.opacity = "1"
+		this.fg.style.height = "100%"
+	}
+
 	_escapePressed(evt) {
 		if (evt.key === "Escape") { // escape key maps to keycode `27`
 			this.close()
@@ -91,7 +109,7 @@ class Modal {
 	cloneContent() {
 		return this.content.cloneNode(true)
 	}
-	
+
 	async open(mod_elem) {
 		let clone_elem = mod_elem || this.cloneContent() // clone content so that all input fields are reset
 		if (this.beforeOpen) this.beforeOpen(clone_elem) // usually used to attach required events
@@ -102,6 +120,9 @@ class Modal {
 
 		document.body.appendChild(this.bg)
 		document.body.appendChild(this.fg)
+		// perform transition after a short timeout so that browser performs 'reflow'
+		// see this answer: https://stackoverflow.com/a/24195559/5712554
+		setTimeout(()=>{this._performTransition()}, 100)
 
 		if (this.autoClose) {
 			document.body.addEventListener('keyup', this._escapePressed)
@@ -113,8 +134,12 @@ class Modal {
 		if (this.autoClose) {
 			document.body.removeEventListener('keyup', this._escapePressed)
 		}
-		this.bg.remove()
-		this.fg.remove()
+		this._resetTransition()
+		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
+			this.bg.remove()
+			this.fg.remove()
+		}, 100)
+
 	}
 }
 
