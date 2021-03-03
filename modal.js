@@ -166,14 +166,13 @@ class ModalAlert extends Modal {
 	}
 
 	open(msg, onokay) {
-		this.beforeOpen = (form)=>{
+		super.open().then((form)=>{
 			form.querySelector("#modal-alert-msg").innerHTML = msg
 			form.querySelector("#modal-alert-ok").onclick = ()=>{
 				if (onokay) onokay(form)
 				this.close()
 			}
-		}
-		super.open()
+		})
 	}
 }
 
@@ -210,7 +209,7 @@ class ModalConfirm extends Modal {
 	}
 
 	open(msg, onokay, oncancel) {
-		this.beforeOpen = (form)=>{
+		super.open().then((form)=>{
 			form.querySelector("#modal-confirm-msg").innerHTML = msg
 			form.querySelector("#modal-confirm-ok").onclick = ()=>{
 				if (onokay) onokay(form)
@@ -220,8 +219,7 @@ class ModalConfirm extends Modal {
 				if (oncancel) oncancel(form)
 				this.close()
 			}
-		}
-		super.open()
+		})
 	}
 }
 
