@@ -30,8 +30,8 @@ class Modal {
 		this.container.style.backgroundColor = "white"
 		this.container.style.color = "#0d0d0d"
 		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
-		this.container.style.marginRight = "20px"
-		this.container.style.marginLeft = "20px"
+		this.container.style.marginRight = options.marginRight || "20px"
+		this.container.style.marginLeft = options.marginLeft || "20px"
 		// this.container.style.overflowY = "scroll"
 
 		this.fg.appendChild(this.container)
@@ -138,7 +138,7 @@ class Modal {
 		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
 			this.bg.remove()
 			this.fg.remove()
-		}, 100)
+		}, 200)
 
 	}
 }
