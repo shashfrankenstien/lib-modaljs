@@ -4,6 +4,7 @@ class Modal {
 		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
 		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
 		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
+		this.afterClose = options.afterClose // afterClose() is called with no args everytime close() is called
 
 		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = "black"
@@ -138,8 +139,8 @@ class Modal {
 		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
 			this.bg.remove()
 			this.fg.remove()
+			if (this.afterClose) this.afterClose() // usually used to attach required events
 		}, 200)
-
 	}
 }
 
