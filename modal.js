@@ -140,7 +140,7 @@ class Modal {
 			this.bg.remove()
 			this.fg.remove()
 			if (this.afterClose) this.afterClose() // usually used to attach required events
-		}, 200)
+		}, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
 	}
 }
 
