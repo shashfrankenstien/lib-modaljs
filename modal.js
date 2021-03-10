@@ -7,7 +7,7 @@ class Modal {
 		this.afterClose = options.afterClose // afterClose() is called with no args everytime close() is called
 
 		this.bg = this._makeCover()
-		this.bg.style.backgroundColor = "black"
+		this.bg.style.backgroundColor = (options.noFade) ? "transparent" : "black"
 
 		this.fg = this._makeCover()
 		this.fg.style.backgroundColor = "transparent"
