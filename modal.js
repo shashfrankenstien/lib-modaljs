@@ -4,7 +4,6 @@ class Modal {
 		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
 		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
 		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
-		this.afterClose = options.afterClose // afterClose() is called with no args everytime close() is called
 
 		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = (options.noFade) ? "transparent" : "black"
@@ -15,6 +14,7 @@ class Modal {
 		// set up trnsition timing
 		this.bg.style.transition = "all 0.1s ease"
 		this.fg.style.transition = "all 0.2s ease"
+		this.transitionStartPos = options.transitionStartPos || {top: '20%'}
 		this._resetTransition()
 
 		if (this.autoClose) {
@@ -91,14 +91,19 @@ class Modal {
 		// set values to closed state
 		this.bg.style.opacity = "0"
 		this.fg.style.opacity = "0"
-		this.fg.style.height = "120%"
+		for (const direction in this.transitionStartPos) {
+			this.fg.style[direction] = this.transitionStartPos[direction]
+		}
 	}
 
 	_performTransition() {
 		// set values to open state
 		this.bg.style.opacity = "0.5"
 		this.fg.style.opacity = "1"
-		this.fg.style.height = "100%"
+		this.fg.style.top = "0px"
+		this.fg.style.bottom = "0px"
+		this.fg.style.right = "0px"
+		this.fg.style.left = "0px"
 	}
 
 	_escapePressed(evt) {
@@ -139,10 +144,72 @@ class Modal {
 		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
 			this.bg.remove()
 			this.fg.remove()
-			if (this.afterClose) this.afterClose() // usually used to attach required events
 		}, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
+
 	}
 }
+
+
+class _ModalDrawerBase extends Modal {
+	constructor(elem, displayStyle, width, height, options) {
+		super(elem, displayStyle, width, height, options)
+		options = options || {}
+		this.container.style.borderRadius = options.borderRadius || "0px"
+		this.container.style.marginRight = options.marginRight || "0px"
+		this.container.style.marginLeft = options.marginLeft || "0px"
+	}
+}
+
+class ModalDrawerHorizontal extends _ModalDrawerBase {
+	constructor(elem, displayStyle, height, side, options) {
+		let transSign = (side==='bottom') ? '': '-' // negative or positive sign for 'top' value
+		options.transitionStartPos = {top: transSign + height}
+		super(elem, displayStyle, '100%', height, options)
+		this.fg.style.flexDirection = 'column'
+		this.fg.style.justifyContent = (side==='bottom') ? 'flex-end' : 'flex-start'
+	}
+}
+
+
+class ModalDrawerVertical extends _ModalDrawerBase {
+	constructor(elem, displayStyle, width, side, options) {
+		let transSign = (side==='right') ? '': '-' // negative or positive sign for 'left' value
+		options.transitionStartPos = {left: transSign + width}
+		super(elem, displayStyle, width, '100%', options)
+		this.fg.style.flexDirection = 'row'
+		this.fg.style.justifyContent = (side==='right') ? 'flex-end' : 'flex-start'
+	}
+}
+
+
+class ModalDrawerTop extends ModalDrawerHorizontal {
+	constructor(elem, displayStyle, height, options) {
+		super(elem, displayStyle, height, 'top', options)
+	}
+}
+
+class ModalDrawerBottom extends ModalDrawerHorizontal {
+	constructor(elem, displayStyle, height, options) {
+		super(elem, displayStyle, height, 'bottom', options)
+	}
+}
+
+
+class ModalDrawerRight extends ModalDrawerVertical {
+	constructor(elem, displayStyle, width, options) {
+		super(elem, displayStyle, width, 'right', options)
+	}
+}
+
+class ModalDrawerLeft extends ModalDrawerVertical {
+	constructor(elem, displayStyle, width, options) {
+		super(elem, displayStyle, width, 'left', options)
+	}
+}
+
+
+
+
 
 
 class ModalAlert extends Modal {
