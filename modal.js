@@ -228,7 +228,7 @@ class ModalAlert extends Modal {
 		ok.style.right = "5%"
 		ok.innerHTML = `Okay`
 
-		elem.innerHTML += `<snap id="modal-alert-msg"></snap>`
+		elem.innerHTML += `<span id="modal-alert-msg"></span>`
 		elem.appendChild(ok)
 
 		super(elem, "block", "600px", "180px", {autoClose: true, noCloseBtn:true})
