@@ -5,7 +5,7 @@ class Modal {
 		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
 		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
 		this.afterClose = options.afterClose // afterClose() is called with no args everytime close() is called
-		
+
 		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = (options.noFade) ? "transparent" : "black"
 
@@ -145,7 +145,7 @@ class Modal {
 		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
 			this.bg.remove()
 			this.fg.remove()
-			if (this.afterClose) this.afterClose()			
+			if (this.afterClose) this.afterClose()
 		}, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
 	}
 }
@@ -214,7 +214,7 @@ class ModalDrawerLeft extends ModalDrawerVertical {
 
 
 class ModalAlert extends Modal {
-	constructor() {
+	constructor(width, height) {
 		let elem = document.createElement("div")
 		elem.style.width = "80%"
 		elem.style.height = "40%"
@@ -231,7 +231,7 @@ class ModalAlert extends Modal {
 		elem.innerHTML += `<span id="modal-alert-msg"></span>`
 		elem.appendChild(ok)
 
-		super(elem, "block", "600px", "180px", {autoClose: true, noCloseBtn:true})
+		super(elem, "block", width || "600px", height || "180px", {autoClose: true, noCloseBtn:true})
 	}
 
 	open(msg, onokay) {
@@ -249,7 +249,7 @@ class ModalAlert extends Modal {
 
 
 class ModalConfirm extends Modal {
-	constructor() {
+	constructor(width, height) {
 		let elem = document.createElement("div")
 		elem.style.width = "80%"
 		elem.style.height = "40%"
@@ -276,7 +276,7 @@ class ModalConfirm extends Modal {
 		elem.appendChild(ok)
 		elem.appendChild(cancel)
 
-		super(elem, "block", "600px", "180px", {autoClose: true, noCloseBtn:true})
+		super(elem, "block", width || "600px", height || "180px", {autoClose: true, noCloseBtn:true})
 	}
 
 	open(msg, onokay, oncancel) {
