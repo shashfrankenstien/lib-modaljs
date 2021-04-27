@@ -31,6 +31,7 @@ class Modal {
 		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
 		this.beforeOpen = options.beforeOpen // beforeOpen() is called with the content element everytime open() is called
 		this.afterClose = options.afterClose // afterClose() is called with no args everytime close() is called
+		this.noTransition = options.noTransition || false // noTransition = true disables modal transition
 
 		this.bg = this._makeCover()
 		this.bg.style.backgroundColor = (options.noFade) ? "transparent" : "black"
@@ -39,9 +40,12 @@ class Modal {
 		this.fg.style.backgroundColor = "transparent"
 
 		// set up trnsition timing
-		this.bg.style.transition = "all 0.1s ease"
-		this.fg.style.transition = "all 0.2s ease"
-		this.transitionStartPos = options.transitionStartPos || {top: '20%'}
+		this.transitionStartPos = {}
+		if (!this.noTransition) { // setup transitions
+			this.transitionStartPos = options.transitionStartPos || {top: '20%'}
+			this.bg.style.transition = "all 0.1s ease"
+			this.fg.style.transition = "all 0.2s ease"
+		}
 		this._resetTransition()
 
 		if (this.autoClose) {
@@ -153,9 +157,14 @@ class Modal {
 
 		document.body.appendChild(this.bg)
 		document.body.appendChild(this.fg)
-		// perform transition after a short timeout so that browser performs 'reflow'
-		// see this answer: https://stackoverflow.com/a/24195559/5712554
-		setTimeout(()=>{this._performTransition()}, 100)
+
+		if (!this.noTransition) { // setup transitions
+			// perform transition after a short timeout so that browser performs 'reflow'
+			// see this answer: https://stackoverflow.com/a/24195559/5712554
+			setTimeout(()=>{this._performTransition()}, 100)
+		} else {
+			this._performTransition()
+		}
 
 		if (this.autoClose) {
 			document.body.addEventListener('keyup', this._escapePressed)
@@ -167,12 +176,17 @@ class Modal {
 		if (this.autoClose) {
 			document.body.removeEventListener('keyup', this._escapePressed)
 		}
-		this._resetTransition()
-		setTimeout(()=>{ // provide time to reset transition (this performs reverse transition)
+		const exitFunc = ()=>{ // provide time to reset transition (this performs reverse transition)
 			this.bg.remove()
 			this.fg.remove()
 			if (this.afterClose) this.afterClose()
-		}, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
+		}
+		if (!this.noTransition) { // setup transitions
+			this._resetTransition()
+			setTimeout(exitFunc, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
+		} else {
+			exitFunc()
+		}
 	}
 }
 
