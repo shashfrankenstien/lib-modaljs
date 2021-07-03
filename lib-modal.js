@@ -337,5 +337,74 @@ class ModalConfirm extends Modal {
 }
 
 
+class ModalToast extends Modal {
+
+	constructor() {
+		let elem = document.createElement("div")
+		elem.style.minWidth = '200px'
+		elem.style.flexDirection = 'row'
+		elem.style.justifyContent = 'space-around'
+		elem.style.alignItems = 'center'
+		elem.style.padding = "10px"
+		elem.style.borderRadius = "5px"
+
+		elem.innerHTML += '<img id="modal-toast-icon" src="" alt="">'
+		let msgelem = document.createElement('b')
+		msgelem.id = "modal-toast-msg"
+		Object.assign(msgelem.style, {
+			flex:'1',
+			textAlign:'center',
+			marginRight: '5px',
+			marginLeft: '5px',
+			color:'black',
+		})
+		elem.appendChild(msgelem)
+
+		super(elem, "flex", "auto", "50px", {
+			noCloseBtn:true,
+			noFade: true
+		})
+		this.container.style.margin = "25px"
+		this.bg.style.pointerEvents = "none"
+		this.fg.style.pointerEvents = "none"
+	}
+
+	open(msg, options) {
+		options = options || {}
+		const placement = options.placement || "right-top" // can be right-top, right-bottom, left-top and left-bottom
+		const timeout = options.timeout || 5000
+		const icon = options.icon || null
+
+		if (placement.startsWith('right')) {
+			this.fg.style.justifyContent = 'flex-end'
+			this.transitionStartPos = {top: '0px', left: "50px"}
+		} else if (placement.startsWith('left')) {
+			this.fg.style.justifyContent = 'flex-start'
+			this.transitionStartPos = {top: '0px', left: "-50px"}
+		}
+
+		if (placement.endsWith('bottom')) {
+			this.fg.style.alignItems = 'flex-end'
+		} else if (placement.endsWith('top')) {
+			this.fg.style.alignItems = 'flex-start'
+		}
+
+		this._resetTransition()
+		clearTimeout(this._timeout)
+		super.open().then((form)=>{
+			if (icon) {
+				let iconElem = form.querySelector("#modal-toast-icon")
+				iconElem.src = icon
+				iconElem.setAttribute('width', '25px')
+			}
+			form.querySelector("#modal-toast-msg").innerHTML = msg
+			this._timeout = setTimeout(()=>this.close(), timeout)
+		})
+	}
+}
+
+
 const modal_alert = new ModalAlert()
 const modal_confirm = new ModalConfirm()
+
+const modal_toast = new ModalToast()
