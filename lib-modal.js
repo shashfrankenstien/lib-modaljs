@@ -42,9 +42,9 @@ class Modal {
 		// set up trnsition timing
 		this.transitionStartPos = {}
 		if (!this.noTransition) { // setup transitions
-			this.transitionStartPos = options.transitionStartPos || {top: '20%'}
+			this.transitionStartPos = options.transitionStartPos || {top: '10%'}
 			this.bg.style.transition = "all 0.1s ease"
-			this.fg.style.transition = "all 0.2s ease"
+			this.fg.style.transition = "all 0.15s ease"
 		}
 		this._resetTransition()
 
@@ -183,7 +183,7 @@ class Modal {
 		}
 		if (!this.noTransition) { // setup transitions
 			this._resetTransition()
-			setTimeout(exitFunc, 250) // wait for 250ms since longest transitions is 200ms (0.2s)
+			setTimeout(exitFunc, 200) // wait for 250ms since longest transitions is 200ms (0.2s)
 		} else {
 			exitFunc()
 		}
