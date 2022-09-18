@@ -25,7 +25,7 @@ SOFTWARE.
 
 
 class Modal {
-	constructor(elem, displayStyle, width, height, options) {
+	constructor(elem, options) {
 		options = options || {}
 		this.autoClose = options.autoClose || false // autoClose = true enables modal close on Escape press and outside click
 		this.noCloseBtn = options.noCloseBtn || false // Don't display close button on top right
@@ -55,8 +55,8 @@ class Modal {
 		}
 
 		this.container = this._makeCover()
-		this.container.style.height = height
-		this.container.style.width = width
+		this.container.style.height = options.height
+		this.container.style.width = options.width
 		this.container.style.position = "relative"
 		this.container.style.borderRadius = options.borderRadius || "4px"
 		this.container.style.backgroundColor = "white"
@@ -70,7 +70,7 @@ class Modal {
 
 		this.content = elem // save the content element
 		this.content.remove() // remove it from DOM
-		this.content.style.display = displayStyle // set display style of content
+		this.content.style.display = options.displayStyle || "block" // set display style of content
 
 		this._escapePressed = this._escapePressed.bind(this)
 	}
@@ -192,8 +192,8 @@ class Modal {
 
 
 class _ModalDrawerBase extends Modal {
-	constructor(elem, displayStyle, width, height, options) {
-		super(elem, displayStyle, width, height, options)
+	constructor(elem, options) {
+		super(elem, options)
 		options = options || {}
 		this.container.style.borderRadius = options.borderRadius || "0px"
 		this.container.style.marginRight = options.marginRight || "0px"
@@ -202,49 +202,55 @@ class _ModalDrawerBase extends Modal {
 }
 
 class ModalDrawerHorizontal extends _ModalDrawerBase {
-	constructor(elem, displayStyle, height, side, options) {
-		let transSign = (side==='bottom') ? '': '-' // negative or positive sign for 'top' value
-		options.transitionStartPos = {top: transSign + height}
-		super(elem, displayStyle, '100%', height, options)
+	constructor(elem, options) {
+		let transSign = (options.side==='bottom') ? '': '-' // negative or positive sign for 'top' value
+		options.transitionStartPos = {top: transSign + options.height}
+		options.width = "100%"
+		super(elem, options)
 		this.fg.style.flexDirection = 'column'
-		this.fg.style.justifyContent = (side==='bottom') ? 'flex-end' : 'flex-start'
+		this.fg.style.justifyContent = (options.side==='bottom') ? 'flex-end' : 'flex-start'
 	}
 }
 
 
 class ModalDrawerVertical extends _ModalDrawerBase {
-	constructor(elem, displayStyle, width, side, options) {
-		let transSign = (side==='right') ? '': '-' // negative or positive sign for 'left' value
-		options.transitionStartPos = {left: transSign + width}
-		super(elem, displayStyle, width, '100%', options)
+	constructor(elem, options) {
+		let transSign = (options.side==='right') ? '': '-' // negative or positive sign for 'left' value
+		options.transitionStartPos = {left: transSign + options.width}
+		options.height = "100%"
+		super(elem, options)
 		this.fg.style.flexDirection = 'row'
-		this.fg.style.justifyContent = (side==='right') ? 'flex-end' : 'flex-start'
+		this.fg.style.justifyContent = (options.side==='right') ? 'flex-end' : 'flex-start'
 	}
 }
 
 
 class ModalDrawerTop extends ModalDrawerHorizontal {
-	constructor(elem, displayStyle, height, options) {
-		super(elem, displayStyle, height, 'top', options)
+	constructor(elem, options) {
+		options.side = 'top'
+		super(elem, options)
 	}
 }
 
 class ModalDrawerBottom extends ModalDrawerHorizontal {
-	constructor(elem, displayStyle, height, options) {
-		super(elem, displayStyle, height, 'bottom', options)
+	constructor(elem, options) {
+		options.side = 'bottom'
+		super(elem, options)
 	}
 }
 
 
 class ModalDrawerRight extends ModalDrawerVertical {
-	constructor(elem, displayStyle, width, options) {
-		super(elem, displayStyle, width, 'right', options)
+	constructor(elem, options) {
+		options.side = 'right'
+		super(elem, options)
 	}
 }
 
 class ModalDrawerLeft extends ModalDrawerVertical {
-	constructor(elem, displayStyle, width, options) {
-		super(elem, displayStyle, width, 'left', options)
+	constructor(elem, options) {
+		options.side = 'left'
+		super(elem, options)
 	}
 }
 
@@ -273,7 +279,10 @@ class ModalAlert extends Modal {
 		elem.innerHTML += `<span id="modal-alert-msg"></span>`
 		elem.appendChild(ok)
 
-		super(elem, "block", width || "600px", height || "180px", {autoClose: true, noCloseBtn:true})
+		super(elem, {
+			autoClose: true, noCloseBtn:true,
+			width: width || "600px", height: height || "180px",
+		})
 	}
 
 	open(msg, onokay) {
@@ -322,7 +331,10 @@ class ModalConfirm extends Modal {
 		elem.appendChild(ok)
 		elem.appendChild(cancel)
 
-		super(elem, "block", width || "600px", height || "180px", {autoClose: true, noCloseBtn:true})
+		super(elem, {
+			autoClose: true, noCloseBtn:true,
+			width: width || "600px", height: height || "180px",
+		})
 	}
 
 	open(msg, onokay, oncancel) {
@@ -366,9 +378,12 @@ class ModalToast extends Modal {
 		})
 		elem.appendChild(msgelem)
 
-		super(elem, "flex", "auto", "50px", {
-			noCloseBtn:true,
-			noFade: true
+		super(elem, {
+			displayStyle: "flex",
+			noCloseBtn: true,
+			noFade: true,
+			width: "auto",
+			height:"50px",
 		})
 		this.container.style.margin = "25px"
 		this.bg.style.pointerEvents = "none"

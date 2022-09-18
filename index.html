@@ -51,15 +51,19 @@
 <script src="lib-modal.js"></script>
 
 <script>
-    const modalTest = new Modal(document.getElementById("potato"), 'block', "200px", '200px', {
+    const modalTest = new Modal(document.getElementById("potato"), {
+        width:"200px",
+        height:"200px",
         noTransition:false
     })
 
-    const modalTest2 = new ModalDrawerBottom(document.getElementById("potato-drawer"), 'block', '200px', {
+    const modalTest2 = new ModalDrawerBottom(document.getElementById("potato-drawer"), {
+        height:"200px",
         noTransition:false
     })
 
-    const modalTest3 = new ModalDrawerLeft(document.getElementById("potato-drawer2"), 'block', '200px', {
+    const modalTest3 = new ModalDrawerLeft(document.getElementById("potato-drawer2"), {
+        width:"200px",
         // noTransition:false
     })
 
