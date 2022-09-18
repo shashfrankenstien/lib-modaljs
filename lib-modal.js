@@ -264,8 +264,10 @@ class ModalAlert extends Modal {
 		ok.classList.add("btn", 'btn-primary')
 		ok.style.position = "absolute"
 		ok.style.bottom = "10%"
+		ok.style.height = "20%"
 		ok.style.width = "30%"
 		ok.style.right = "5%"
+		ok.style.cursor = "pointer"
 		ok.innerHTML = `Okay`
 
 		elem.innerHTML += `<span id="modal-alert-msg"></span>`
@@ -299,8 +301,10 @@ class ModalConfirm extends Modal {
 		ok.classList.add("btn", 'btn-primary')
 		ok.style.position = "absolute"
 		ok.style.bottom = "10%"
+		ok.style.height = "20%"
 		ok.style.width = "30%"
 		ok.style.right = "26%"
+		ok.style.cursor = "pointer"
 		ok.innerHTML = `Okay`
 
 		let cancel = document.createElement("button")
@@ -308,8 +312,10 @@ class ModalConfirm extends Modal {
 		cancel.classList.add("btn", 'btn-secondary')
 		cancel.style.position = "absolute"
 		cancel.style.bottom = "10%"
+		cancel.style.height = "20%"
 		cancel.style.width = "18%"
 		cancel.style.right = "5%"
+		cancel.style.cursor = "pointer"
 		cancel.innerHTML = `Cancel`
 
 		elem.innerHTML += `<span id="modal-confirm-msg"></span>`

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: rgb(184, 184, 184);
+        }
+        button {
+            margin:10px;
+            width:150px;
+            height:25px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h2>Modal Tests</h2>
+
+    <div id="potato">
+        Hello! <h1>Test!</h1>
+    </div>
+
+    <div id="potato-drawer">
+        Hello! <h1>Test!</h1>
+    </div>
+
+    <div id="potato-drawer2">
+        Hello! <h1>Test!</h1>
+    </div>
+
+    <button onclick="modalTest.open()">Popup!</button>
+    <button onclick="modalTest2.open()">Drawer</button>
+    <button onclick="modalTest3.open()">Drawer2</button>
+    <button onclick="modal_alert.open('Whaaaaa!!?')">Alert</button>
+    <button onclick="test_confirm()">Confirm</button>
+    <button onclick="modal_toast.open('Note! This is a toast')">Toast Right Top</button>
+    <button onclick="modal_toast.open('Note! This is a toast', {placement:'right-bottom'})">Toast Right Bottom</button>
+</body>
+
+<script src="lib-modal.js"></script>
+
+<script>
+    const modalTest = new Modal(document.getElementById("potato"), 'block', "200px", '200px', {
+        noTransition:false
+    })
+
+    const modalTest2 = new ModalDrawerBottom(document.getElementById("potato-drawer"), 'block', '200px', {
+        noTransition:false
+    })
+
+    const modalTest3 = new ModalDrawerLeft(document.getElementById("potato-drawer2"), 'block', '200px', {
+        // noTransition:false
+    })
+
+    function test_confirm() {
+        modal_confirm.open("Sure!!?", ()=>modalTest.open(), ()=>modal_alert.open("Cancelled"))
+    }
+</script>
+
+</html>
