@@ -59,7 +59,7 @@ class Modal {
 		this.container.style.width = options.width
 		this.container.style.position = "relative"
 		this.container.style.borderRadius = options.borderRadius || "4px"
-		this.container.style.backgroundColor = "white"
+		this.container.style.backgroundColor = options.containerColor || "white"
 		this.container.style.color = "#0d0d0d"
 		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
 		this.container.style.marginRight = options.marginRight || "20px"
