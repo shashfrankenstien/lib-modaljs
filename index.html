@@ -27,15 +27,15 @@
 
     <h2>Modal Tests</h2>
 
-    <div id="potato">
+    <div id="test" style="display:none;">
         Hello! <h1>Test!</h1>
     </div>
 
-    <div id="potato-drawer">
+    <div id="test-drawer" style="display:none;">
         Hello! <h1>Test!</h1>
     </div>
 
-    <div id="potato-drawer2">
+    <div id="test-drawer2" style="display:none;">
         Hello! <h1>Test!</h1>
     </div>
 
@@ -51,18 +51,18 @@
 <script src="lib-modal.js"></script>
 
 <script>
-    const modalTest = new Modal(document.getElementById("potato"), {
+    const modalTest = new Modal(document.getElementById("test"), {
         width:"200px",
         height:"200px",
         noTransition:false
     })
 
-    const modalTest2 = new ModalDrawerBottom(document.getElementById("potato-drawer"), {
+    const modalTest2 = new ModalDrawerBottom(document.getElementById("test-drawer"), {
         height:"200px",
         noTransition:false
     })
 
-    const modalTest3 = new ModalDrawerLeft(document.getElementById("potato-drawer2"), {
+    const modalTest3 = new ModalDrawerLeft(document.getElementById("test-drawer2"), {
         width:"200px",
         // noTransition:false
     })

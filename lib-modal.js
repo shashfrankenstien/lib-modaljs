@@ -57,14 +57,17 @@ class Modal {
 		this.container = this._makeCover()
 		this.container.style.height = options.height
 		this.container.style.width = options.width
-		this.container.style.position = "relative"
-		this.container.style.borderRadius = options.borderRadius || "4px"
-		this.container.style.backgroundColor = options.containerColor || "white"
-		this.container.style.color = "#0d0d0d"
-		this.container.style.boxShadow = "0 4px 8px 0 rgba(0,0,0,0.4)"
-		this.container.style.marginRight = options.marginRight || "20px"
-		this.container.style.marginLeft = options.marginLeft || "20px"
-		// this.container.style.overflowY = "scroll"
+		const css = Object.assign({
+			position: "relative",
+			borderRadius: options.borderRadius || "4px",
+			backgroundColor: options.containerColor || "white",
+			color: "#0d0d0d",
+			boxShadow: "0 4px 8px 0 rgba(0,0,0,0.4)",
+			marginRight: options.marginRight || "20px",
+			marginLeft: options.marginLeft || "20px",
+			// overflowY: "scroll",
+		}, options.css || {})
+		Object.assign(this.container.style, css)
 
 		this.fg.appendChild(this.container)
 
@@ -82,39 +85,43 @@ class Modal {
 		btn.onclick = ()=>{
 			this.close()
 		}
-		btn.style.position = "absolute"
-		btn.style.display = "flex"
-		btn.style.justifyContent = "center"
-		btn.style.alignItems = "center"
-		btn.style.top = "15px"
-		btn.style.right = "25px"
-		btn.style.width = "40px"
-		btn.style.height = "40px"
-		btn.style.borderRadius = "20px"
-		btn.style.cursor = "pointer"
+		Object.assign(btn.style, {
+			position: "absolute",
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "center",
+			top: "15px",
+			right: "25px",
+			width: "40px",
+			height: "40px",
+			borderRadius: "20px",
+			cursor: "pointer",
 
-		btn.style.background = "#e3e3e3"
-		btn.style.opacity = "0.8"
-		btn.style.fontSize = "20px"
-		btn.style.fontWeight = "1000"
-		btn.style.zIndex = '110'
+			background: "#e3e3e3",
+			opacity: "0.8",
+			fontSize: "20px",
+			fontWeight: "1000",
+			zIndex: '110',
+		})
 		return btn
 	}
 
 	_makeCover() {
 		let cover = document.createElement("div")
-		cover.style.position = 'fixed'
-		cover.style.height = '100%'
-		cover.style.width = '100%'
-		cover.style.top = '0'
-		cover.style.bottom = '0'
-		cover.style.right = '0'
-		cover.style.left = '0'
-		cover.style.zIndex = '100'
-		cover.style.display = 'flex'
-		cover.style.justifyContent = 'center'
-		cover.style.alignItems = 'center'
-		cover.style.overflow = 'hidden'
+		Object.assign(cover.style, {
+			position: 'fixed',
+			height: '100%',
+			width: '100%',
+			top: '0',
+			bottom: '0',
+			right: '0',
+			left: '0',
+			zIndex: '100',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			overflow: 'hidden',
+		})
 		return cover
 	}
 
@@ -130,11 +137,13 @@ class Modal {
 	_performTransition() {
 		// set values to open state
 		this.bg.style.opacity = "0.5"
-		this.fg.style.opacity = "1"
-		this.fg.style.top = "0px"
-		this.fg.style.bottom = "0px"
-		this.fg.style.right = "0px"
-		this.fg.style.left = "0px"
+		Object.assign(this.fg.style, {
+			opacity: "1",
+			top: "0px",
+			bottom: "0px",
+			right: "0px",
+			left: "0px",
+		})
 	}
 
 	_escapePressed(evt) {
@@ -193,11 +202,14 @@ class Modal {
 
 class _ModalDrawerBase extends Modal {
 	constructor(elem, options) {
-		super(elem, options)
 		options = options || {}
-		this.container.style.borderRadius = options.borderRadius || "0px"
-		this.container.style.marginRight = options.marginRight || "0px"
-		this.container.style.marginLeft = options.marginLeft || "0px"
+		options.css = options.css || {}
+		Object.assign(options.css, {
+			borderRadius: options.borderRadius || "0px",
+			marginRight: options.marginRight || "0px",
+			marginLeft: options.marginLeft || "0px",
+		})
+		super(elem, options)
 	}
 }
 
@@ -260,7 +272,7 @@ class ModalDrawerLeft extends ModalDrawerVertical {
 
 
 class ModalAlert extends Modal {
-	constructor(width, height) {
+	constructor(options) {
 		let elem = document.createElement("div")
 		elem.style.width = "80%"
 		elem.style.height = "40%"
@@ -268,21 +280,23 @@ class ModalAlert extends Modal {
 		let ok = document.createElement("button")
 		ok.id = "modal-alert-ok"
 		ok.classList.add("btn", 'btn-primary')
-		ok.style.position = "absolute"
-		ok.style.bottom = "10%"
-		ok.style.height = "20%"
-		ok.style.width = "30%"
-		ok.style.right = "5%"
-		ok.style.cursor = "pointer"
+		Object.assign(ok.style, {
+			position: "absolute",
+			bottom: "10%",
+			height: "20%",
+			width: "30%",
+			right: "5%",
+			cursor: "pointer",
+		})
 		ok.innerHTML = `Okay`
 
 		elem.innerHTML += `<span id="modal-alert-msg"></span>`
 		elem.appendChild(ok)
 
-		super(elem, {
+		super(elem, Object.assign({
 			autoClose: true, noCloseBtn:true,
-			width: width || "600px", height: height || "180px",
-		})
+			width: "600px", height: "180px",
+		}, options))
 	}
 
 	open(msg, onokay) {
@@ -300,7 +314,7 @@ class ModalAlert extends Modal {
 
 
 class ModalConfirm extends Modal {
-	constructor(width, height) {
+	constructor(options) {
 		let elem = document.createElement("div")
 		elem.style.width = "80%"
 		elem.style.height = "40%"
@@ -308,33 +322,37 @@ class ModalConfirm extends Modal {
 		let ok = document.createElement("button")
 		ok.id = "modal-confirm-ok"
 		ok.classList.add("btn", 'btn-primary')
-		ok.style.position = "absolute"
-		ok.style.bottom = "10%"
-		ok.style.height = "20%"
-		ok.style.width = "30%"
-		ok.style.right = "26%"
-		ok.style.cursor = "pointer"
+		Object.assign(ok.style, {
+			position: "absolute",
+			bottom: "10%",
+			height: "20%",
+			width: "30%",
+			right: "26%",
+			cursor: "pointer",
+		})
 		ok.innerHTML = `Okay`
 
 		let cancel = document.createElement("button")
 		cancel.id = "modal-confirm-cancel"
 		cancel.classList.add("btn", 'btn-secondary')
-		cancel.style.position = "absolute"
-		cancel.style.bottom = "10%"
-		cancel.style.height = "20%"
-		cancel.style.width = "18%"
-		cancel.style.right = "5%"
-		cancel.style.cursor = "pointer"
+		Object.assign(cancel.style, {
+			position: "absolute",
+			bottom: "10%",
+			height: "20%",
+			width: "18%",
+			right: "5%",
+			cursor: "pointer",
+		})
 		cancel.innerHTML = `Cancel`
 
 		elem.innerHTML += `<span id="modal-confirm-msg"></span>`
 		elem.appendChild(ok)
 		elem.appendChild(cancel)
 
-		super(elem, {
+		super(elem, Object.assign({
 			autoClose: true, noCloseBtn:true,
-			width: width || "600px", height: height || "180px",
-		})
+			width: "600px", height: "180px",
+		}, options))
 	}
 
 	open(msg, onokay, oncancel) {
@@ -357,14 +375,22 @@ class ModalConfirm extends Modal {
 
 class ModalToast extends Modal {
 
-	constructor() {
+	constructor(options) {
+		options = options || {}
+		options.css = options.css || {}
+		Object.assign(options.css, {
+			color: "black",
+			margin: "25px",
+		})
 		let elem = document.createElement("div")
-		elem.style.minWidth = '200px'
-		elem.style.flexDirection = 'row'
-		elem.style.justifyContent = 'space-around'
-		elem.style.alignItems = 'center'
-		elem.style.padding = "10px"
-		elem.style.borderRadius = "5px"
+		Object.assign(elem.style, {
+			minWidth: '200px',
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			alignItems: 'center',
+			padding: "10px",
+			borderRadius: "5px",
+		})
 
 		elem.innerHTML += '<img id="modal-toast-icon" src="" alt="">'
 		let msgelem = document.createElement('b')
@@ -374,18 +400,17 @@ class ModalToast extends Modal {
 			textAlign:'center',
 			marginRight: '5px',
 			marginLeft: '5px',
-			color:'black',
+			// color:'black',
 		})
 		elem.appendChild(msgelem)
 
-		super(elem, {
+		super(elem, Object.assign({
 			displayStyle: "flex",
 			noCloseBtn: true,
 			noFade: true,
 			width: "auto",
 			height:"50px",
-		})
-		this.container.style.margin = "25px"
+		}, options))
 		this.bg.style.pointerEvents = "none"
 		this.fg.style.pointerEvents = "none"
 	}
@@ -427,5 +452,5 @@ class ModalToast extends Modal {
 
 const modal_alert = new ModalAlert()
 const modal_confirm = new ModalConfirm()
-
 const modal_toast = new ModalToast()
+
