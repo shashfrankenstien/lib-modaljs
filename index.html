@@ -20,6 +20,18 @@
             width:150px;
             height:25px;
         }
+        .dark-mode {
+            background-color: blueviolet !important;
+            color: white !important;
+        }
+        .dark-mode .close-btn {
+            background-color: black !important;
+            color: white !important;
+            transition: transform ease 0.2s;
+        }
+        .dark-mode .close-btn:hover {
+            transform: rotate(90deg);
+        }
     </style>
 
 </head>
@@ -54,17 +66,17 @@
     const modalTest = new Modal(document.getElementById("test"), {
         width:"200px",
         height:"200px",
-        noTransition:false
+        // noTransition:false
     })
 
     const modalTest2 = new ModalDrawerBottom(document.getElementById("test-drawer"), {
         height:"200px",
-        noTransition:false
+        // noTransition:false
     })
 
     const modalTest3 = new ModalDrawerLeft(document.getElementById("test-drawer2"), {
         width:"200px",
-        // noTransition:false
+        classList: ['dark-mode'],
     })
 
     function test_confirm() {

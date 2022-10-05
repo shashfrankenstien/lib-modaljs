@@ -38,7 +38,7 @@ Try the minified version
 
 Option | type | default | Purpose
 -------|------|---------|----------
-displayStyle | String | `block` | Display style of modal container when shown
+displayStyle | String | `block` | Display style of modal content when shown
 width | String | - | Width of the modal
 height | String | - | Height of the modal
 autoClose | Boolean | `false` | Auto close when clicked outside the modal or when Esc is pressed
@@ -46,7 +46,8 @@ noCloseBtn | Boolean | `false` | Don't show close button on top right
 noTransition | Boolean | `false` | Disable modal animated transition
 noFade | Boolean | `false` | Don't fade background
 transitionStartPos | Object | `{top: '10%'}` | Start position of transition
-css | Object | `{ position: "relative", borderRadius: "4px", backgroundColor: "white", color: "#0d0d0d", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.4)", marginRight: "20px", marginLeft: "20px" }`| CSS to apply to modal container
+classList | Array | `[]`| CSS classes to add to modal container
+css | Object | `{ position: "relative", borderRadius: "4px", backgroundColor: "white", color: "#0d0d0d", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.4)", marginRight: "20px", marginLeft: "20px" }`| Inline CSS to apply to modal container
 beforeOpen | function | `undefined` | function called with modal content before open
 afterClose | function | `undefined` | function called after close
 

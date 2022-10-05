@@ -55,6 +55,7 @@ class Modal {
 		}
 
 		this.container = this._makeCover()
+		this.container.classList.add(...(options.classList || []))
 		this.container.style.height = options.height
 		this.container.style.width = options.width
 		const css = Object.assign({
@@ -80,6 +81,7 @@ class Modal {
 
 	_makeCloseBtn() {
 		let btn = document.createElement("span")
+		btn.classList.add('close-btn')
 		btn.innerHTML = "&times;"
 		btn.onclick = ()=>{
 			this.close()
