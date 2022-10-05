@@ -81,7 +81,6 @@ class Modal {
 	_makeCloseBtn() {
 		let btn = document.createElement("span")
 		btn.innerHTML = "&times;"
-		btn.id="close"
 		btn.onclick = ()=>{
 			this.close()
 		}
@@ -278,8 +277,7 @@ class ModalAlert extends Modal {
 		elem.style.height = "40%"
 
 		let ok = document.createElement("button")
-		ok.id = "modal-alert-ok"
-		ok.classList.add("btn", 'btn-primary')
+		ok.classList.add("modal-alert-ok", "btn", 'btn-primary')
 		Object.assign(ok.style, {
 			position: "absolute",
 			bottom: "10%",
@@ -290,7 +288,7 @@ class ModalAlert extends Modal {
 		})
 		ok.innerHTML = `Okay`
 
-		elem.innerHTML += `<span id="modal-alert-msg"></span>`
+		elem.innerHTML += `<span class="modal-alert-msg"></span>`
 		elem.appendChild(ok)
 
 		super(elem, Object.assign({
@@ -301,8 +299,8 @@ class ModalAlert extends Modal {
 
 	open(msg, onokay) {
 		super.open().then((form)=>{
-			form.querySelector("#modal-alert-msg").innerHTML = msg
-			let okbtn = form.querySelector("#modal-alert-ok")
+			form.querySelector(".modal-alert-msg").innerHTML = msg
+			let okbtn = form.querySelector(".modal-alert-ok")
 			okbtn.onclick = ()=>{
 				if (onokay) onokay(form)
 				this.close()
@@ -320,8 +318,7 @@ class ModalConfirm extends Modal {
 		elem.style.height = "40%"
 
 		let ok = document.createElement("button")
-		ok.id = "modal-confirm-ok"
-		ok.classList.add("btn", 'btn-primary')
+		ok.classList.add("modal-confirm-ok", "btn", 'btn-primary')
 		Object.assign(ok.style, {
 			position: "absolute",
 			bottom: "10%",
@@ -333,8 +330,7 @@ class ModalConfirm extends Modal {
 		ok.innerHTML = `Okay`
 
 		let cancel = document.createElement("button")
-		cancel.id = "modal-confirm-cancel"
-		cancel.classList.add("btn", 'btn-secondary')
+		cancel.classList.add("modal-confirm-cancel", "btn", 'btn-secondary')
 		Object.assign(cancel.style, {
 			position: "absolute",
 			bottom: "10%",
@@ -345,7 +341,7 @@ class ModalConfirm extends Modal {
 		})
 		cancel.innerHTML = `Cancel`
 
-		elem.innerHTML += `<span id="modal-confirm-msg"></span>`
+		elem.innerHTML += `<span class="modal-confirm-msg"></span>`
 		elem.appendChild(ok)
 		elem.appendChild(cancel)
 
@@ -357,14 +353,14 @@ class ModalConfirm extends Modal {
 
 	open(msg, onokay, oncancel) {
 		super.open().then((form)=>{
-			form.querySelector("#modal-confirm-msg").innerHTML = msg
-			let okbtn = form.querySelector("#modal-confirm-ok")
+			form.querySelector(".modal-confirm-msg").innerHTML = msg
+			let okbtn = form.querySelector(".modal-confirm-ok")
 			okbtn.onclick = ()=>{
 				if (onokay) onokay(form)
 				this.close()
 			}
 			okbtn.focus()
-			form.querySelector("#modal-confirm-cancel").onclick = ()=>{
+			form.querySelector(".modal-confirm-cancel").onclick = ()=>{
 				if (oncancel) oncancel(form)
 				this.close()
 			}
@@ -392,9 +388,9 @@ class ModalToast extends Modal {
 			borderRadius: "5px",
 		})
 
-		elem.innerHTML += '<img id="modal-toast-icon" src="" alt="">'
+		elem.innerHTML += '<img class="modal-toast-icon" src="" alt="">'
 		let msgelem = document.createElement('b')
-		msgelem.id = "modal-toast-msg"
+		msgelem.classList.add("modal-toast-msg")
 		Object.assign(msgelem.style, {
 			flex:'1',
 			textAlign:'center',
@@ -439,11 +435,11 @@ class ModalToast extends Modal {
 		clearTimeout(this._timeout)
 		super.open().then((form)=>{
 			if (icon) {
-				let iconElem = form.querySelector("#modal-toast-icon")
+				let iconElem = form.querySelector(".modal-toast-icon")
 				iconElem.src = icon
 				iconElem.setAttribute('width', '25px')
 			}
-			form.querySelector("#modal-toast-msg").innerHTML = msg
+			form.querySelector(".modal-toast-msg").innerHTML = msg
 			this._timeout = setTimeout(()=>this.close(), timeout)
 		})
 	}
