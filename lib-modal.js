@@ -371,6 +371,81 @@ class ModalConfirm extends Modal {
 }
 
 
+class ModalPrompt extends Modal {
+	constructor(options) {
+		let elem = document.createElement("div")
+		elem.style.width = "80%"
+		elem.style.height = "60%"
+		elem.style.flexDirection = "column"
+		elem.style.gap = "0.3rem"
+
+		let ok = document.createElement("button")
+		ok.classList.add("modal-prompt-ok", "btn", 'btn-primary')
+		Object.assign(ok.style, {
+			position: "absolute",
+			bottom: "10%",
+			height: "20%",
+			width: "30%",
+			right: "26%",
+			cursor: "pointer",
+		})
+		ok.innerHTML = `Okay`
+
+		let cancel = document.createElement("button")
+		cancel.classList.add("modal-prompt-cancel", "btn", 'btn-secondary')
+		Object.assign(cancel.style, {
+			position: "absolute",
+			bottom: "10%",
+			height: "20%",
+			width: "18%",
+			right: "5%",
+			cursor: "pointer",
+		})
+		cancel.innerHTML = `Cancel`
+
+		elem.innerHTML += `<span class="modal-prompt-msg"></span>`
+		elem.innerHTML += `<br><input class="modal-prompt-input" style="width:100%;height:25%;">`
+		elem.appendChild(ok)
+		elem.appendChild(cancel)
+
+		super(elem, Object.assign({
+			displayStyle: 'flex',
+			autoClose: true, noCloseBtn:true,
+			width: "600px", height: "180px",
+		}, options))
+	}
+
+	open(msg, defaultval, onokay, oncancel) {
+		// defaultval is optional. If it is omitted, oncancel will be null - because onokay=defaultval, oncancel=onokay
+		// this alows for two seemingly overloaded function signatures
+		// - open(msg, defaultval, onokay, oncancel)
+		// - open(msg, onokay, oncancel)
+		if (typeof defaultval === 'function' && !oncancel) {
+			oncancel = onokay
+			onokay = defaultval
+			defaultval = null
+			console.log("here")
+		}
+		super.open().then((form)=>{
+			form.querySelector(".modal-prompt-msg").innerHTML = msg
+			const inp = form.querySelector(".modal-prompt-input")
+			inp.value = defaultval || ''
+			inp.select()
+			let okbtn = form.querySelector(".modal-prompt-ok")
+			okbtn.onclick = ()=>{
+				if (onokay) onokay(inp.value, form)
+				this.close()
+			}
+			// okbtn.focus()
+			form.querySelector(".modal-prompt-cancel").onclick = ()=>{
+				if (oncancel) oncancel(form)
+				this.close()
+			}
+		})
+	}
+}
+
+
 class ModalToast extends Modal {
 
 	constructor(options) {
@@ -450,5 +525,6 @@ class ModalToast extends Modal {
 
 const modal_alert = new ModalAlert()
 const modal_confirm = new ModalConfirm()
+const modal_prompt = new ModalPrompt()
 const modal_toast = new ModalToast()
 

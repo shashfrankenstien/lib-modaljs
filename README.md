@@ -6,7 +6,7 @@ Use this repository as cdn
 <script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs/lib-modal.js"></script>
 ```
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs@v0.2.0/lib-modal.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs@v0.2.1/lib-modal.js"></script>
 ```
 
 Try the minified version
@@ -14,7 +14,7 @@ Try the minified version
 <script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs/lib-modal.min.js"></script>
 ```
 ```html
-<script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs@v0.2.0/lib-modal.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/shashfrankenstien/lib-modaljs@v0.2.1/lib-modal.min.js"></script>
 ```
 
 # Usage

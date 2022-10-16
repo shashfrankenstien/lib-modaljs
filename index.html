@@ -56,6 +56,7 @@
     <button onclick="modalTest3.open()">Drawer2</button>
     <button onclick="modal_alert.open('Whaaaaa!!?')">Alert</button>
     <button onclick="test_confirm()">Confirm</button>
+    <button onclick="test_prompt()">Prompt</button>
     <button onclick="modal_toast.open('Note! This is a toast')">Toast Right Top</button>
     <button onclick="modal_toast.open('Note! This is a toast', {placement:'right-bottom'})">Toast Right Bottom</button>
 </body>
@@ -81,6 +82,10 @@
 
     function test_confirm() {
         modal_confirm.open("Sure!!?", ()=>modalTest.open(), ()=>modal_alert.open("Cancelled"))
+    }
+
+    function test_prompt() {
+        modal_prompt.open("Enter text:", "Some default text", (val)=>modal_alert.open(`You entered: ${val}`), ()=>modal_alert.open("Cancelled"))
     }
 </script>
 
